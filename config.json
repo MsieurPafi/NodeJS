@@ -1,0 +1,13 @@
+{
+  "development": {
+    "dialect": "mysql",
+    "database": "nodejs",
+    "host": "localhost",
+    "username": "root",
+    "password": "",
+    "port": 3306
+  },
+  "production": {
+    "key": "value prod"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "~2.5.2",
+    "hapi": "~15.1.1",
+    "lodash": "~4.16.3",
+    "mysql": "~2.11.1",
+    "sequelize": "~3.24.3",
+    "vision": "~4.1.0"
+  },
+  "scripts": {
+    "start": "node ./index",
+    "db:sync": "DB_SYNC=true node ./database.js"
+  }
+}
