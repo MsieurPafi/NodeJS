@@ -12,6 +12,8 @@ const server = new Hapi.Server();
  */
 
 const ejs = require('ejs');
+const passwordHash = require('password-hash');
+
 
 /**
  * Register inside a constant

@@ -39,21 +39,27 @@ module.exports = (database, types) => {
     }
   }, {
     underscored: true,
-    hooks: {
+    classMethods: {
+      associate: models => {
+        models.user.belongsToMany(models.user, {
+          through: 'users_following',
+          as: 'followers'
+        });
+        models.user.hasMany(models.user, {
+          as: 'following'
+        });
+        models.user.hasMany(models.tweet, {
+          onDelete: 'cascade'
+        });
+      }
+    },//Creating a hook to destroy the relation between the destroyed user and its tweets
+      hooks: {
       beforeDestroy: (user) => {
         database.models.tweet.destroy({
           where: {
             user_id: user.id
           }
-        })
-        .then(result => {
-          return reply(result);
-        })
-        .catch(err => {
-          return reply({
-            error: err.message
-          })
-        })
+        });
       }
     }
   });

@@ -3,6 +3,8 @@
  */
 
 const models = require('../../database');
+const passwordHash = require('password-hash');
+
 
 /**
  * Export the user API with its own routes.
@@ -18,7 +20,17 @@ exports.register = function (server, options, next) {
 				request.params ||
 				request.body;
 
-			models.user.create(data)
+			var hashedPassword = passwordHash.generate(data.password);
+
+
+			models.user.create({
+				username: data.username,
+				first_name: data.first_name,
+				last_name: data.last_name,
+				biography: data.biography,
+				password: hashedPassword,
+				email: data.email
+			})
 				.then(result => {
 					return reply(result)
 				})
@@ -27,8 +39,18 @@ exports.register = function (server, options, next) {
 						error: err.message
 					})
 				})
+
+			// models.user.create(data)
+			// 	.then(result => {
+			// 		return reply(result)
+			// 	})
+			// 	.catch(err => {
+			// 		return reply({
+			// 			error: err.message
+			// 		})
+			// 	})
 		}
-	})
+	});
 
 	server.route({
 		method: "GET",
@@ -96,7 +118,7 @@ exports.register = function (server, options, next) {
 					})
 				})
 		}
-	})
+	});
 
 	server.route({
 		method: 'DELETE',
@@ -121,7 +143,7 @@ exports.register = function (server, options, next) {
 					})
 				})
 		}
-	})
+	});
 
 	server.route({
 		method: 'GET',
@@ -131,8 +153,6 @@ exports.register = function (server, options, next) {
 				request.payload ||
 				request.params ||
 				request.body;
-
-			const resultFix = null;
 
 			models.tweet.findAll({
 					where: {
@@ -148,7 +168,48 @@ exports.register = function (server, options, next) {
 					})
 				})
 		}
-	})
+	});
+
+ 
+
+	server.route({
+		method: 'GET',
+		path: '/users/{id}/following',
+		handler: (request, reply) => {
+			const data = 
+				request.payload ||
+				request.params ||
+				request.body;
+
+			models.user.findAll({
+				// include: [
+				// database.users_following, {//il faut trouver comment rejoindre la table de followers
+				// 	where: {
+				// 		follower_id: data.id 
+				// 	}
+				// }]	
+				where: {
+						
+				},
+				include: [{
+					model: models.user, //here we need to reach the users_follower table
+		      		where: {
+		      			follower_id: data.id
+		      		}
+				}]	
+			})
+					
+			.then(result => {
+				return reply(result);
+			})
+			.catch(err => {
+				console.log(err);
+				return reply({
+					error: err.message
+				})
+			})
+		}
+	});
 
   	next();
 };

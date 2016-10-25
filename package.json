@@ -10,11 +10,12 @@
     "hapi": "~15.1.1",
     "lodash": "~4.16.3",
     "mysql": "~2.11.1",
+    "password-hash": "~1.2.2",
     "sequelize": "~3.24.3",
     "vision": "~4.1.0"
   },
   "scripts": {
     "start": "node ./index",
-    "db:sync": "DB_SYNC=true node ./database.js"
+    "db:sync": "node ./database.js"
   }
 }
